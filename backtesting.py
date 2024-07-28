@@ -9,9 +9,8 @@ def simple_moving_average_strategy(data, short_window=40, long_window=100):
     signals['short_mavg'] = data['Close'].rolling(window=short_window, min_periods=1, center=False).mean()
     signals['long_mavg'] = data['Close'].rolling(window=long_window, min_periods=1, center=False).mean()
 
-    signals['signal'][short_window:] = np.where(
-        signals['short_mavg'][short_window:] > signals['long_mavg'][short_window:], 1.0, 0.0
-    )
+    signals.loc[:, 'signal'] = np.where(
+        signals['short_mavg'] > signals['long_mavg'], 1.0, 0.0)
 
     signals['positions'] = signals['signal'].diff()
 
@@ -47,7 +46,7 @@ def rsi_strategy(data, window=14):
     gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
     loss = (-delta.where(delta < 0, 0)).rolling(window=window).mean()
     RS = gain / loss
-    data['RSI'] = 100 - (100 / (1 + RS))
+    data.loc[:, 'RSI'] = 100 - (100 / (1 + RS))
     signals = pd.DataFrame(index=data.index)
     signals['signal'] = 0.0
     signals['signal'][window:] = np.where(data['RSI'][window:] > 70, -1.0, np.where(data['RSI'][window:] < 30, 1.0, 0.0))

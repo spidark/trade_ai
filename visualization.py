@@ -1,31 +1,28 @@
-import matplotlib.pyplot as plt
 import os
+import matplotlib.pyplot as plt
 
 def plot_price_and_indicators(symbol, data, indicators, output_dir):
-    plt.figure(figsize=(14, 7))
+    plt.figure(figsize=(10, 6))
     plt.plot(data['Close'], label='Close Price')
-    if 'short_mavg' in indicators:
-        plt.plot(indicators['short_mavg'], label='Short Moving Average')
-    if 'long_mavg' in indicators:
-        plt.plot(indicators['long_mavg'], label='Long Moving Average')
-    if 'RSI' in indicators:
-        plt.plot(indicators['RSI'], label='RSI')
-    plt.title(f'{symbol} Price and Indicators')
+    for indicator_name, values in indicators.items():
+        plt.plot(values, label=indicator_name)
+    plt.title(f"{symbol} Price and Technical Indicators")
     plt.legend()
-    plt.savefig(os.path.join(output_dir, f'{symbol}_price_indicators.png'))
+    plt.savefig(os.path.join(output_dir, f"{symbol}_price_and_indicators.png"))
     plt.close()
 
 def plot_backtest_results(symbol, data, trading_log, output_dir):
-    buy_signals = [log for log in trading_log if log[1] == 'buy']
-    sell_signals = [log for log in trading_log if log[1] == 'sell']
-    
-    plt.figure(figsize=(14, 7))
+    plt.figure(figsize=(10, 6))
     plt.plot(data['Close'], label='Close Price')
-    plt.scatter([log[0] for log in buy_signals], [log[2] for log in buy_signals], marker='^', color='g', label='Buy Signal', alpha=1)
-    plt.scatter([log[0] for log in sell_signals], [log[2] for log in sell_signals], marker='v', color='r', label='Sell Signal', alpha=1)
-    plt.title(f'{symbol} Backtest Results')
+    buy_signals = [log[2] for log in trading_log if log[1] == 'buy']
+    buy_dates = [log[0] for log in trading_log if log[1] == 'buy']
+    sell_signals = [log[2] for log in trading_log if log[1] == 'sell']
+    sell_dates = [log[0] for log in trading_log if log[1] == 'sell']
+    plt.plot(buy_dates, buy_signals, '^', markersize=10, color='g', lw=0, label='Buy Signal')
+    plt.plot(sell_dates, sell_signals, 'v', markersize=10, color='r', lw=0, label='Sell Signal')
+    plt.title(f"{symbol} Backtest Results")
     plt.legend()
-    plt.savefig(os.path.join(output_dir, f'{symbol}_backtest.png'))
+    plt.savefig(os.path.join(output_dir, f"{symbol}_backtest_results.png"))
     plt.close()
 
 def plot_regression_results(X_test, y_test, y_pred, output_dir):
