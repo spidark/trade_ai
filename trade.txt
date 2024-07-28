@@ -1,27 +1,27 @@
 Top 5 Gainers ETFs (5 Days):
-GLD: -0.43%, Action: hold, TP: 220.63, Max Profit: 1.95%, Duration: 0.00 hours
-DIA: 0.48%, Action: hold, TP: 405.97, Max Profit: 1.83%, Duration: 0.00 hours
-VNQ: 0.58%, Action: hold, TP: 89.57, Max Profit: 1.91%, Duration: 0.00 hours
-^GDAXI: 0.80%, Action: hold, TP: 18417.55, Max Profit: 1.42%, Duration: 0.00 hours
-IWM: 3.00%, Action: buy, TP: 228.70, Max Profit: 2.92%, Duration: 4.40 hours
+GLD: -0.43%, Action: hold, TP: 220.63, Max Profit: 1.95%, Duration: 0.00 hours, SMA_20: nan, EMA_20: 221.44, RSI_14: nan, Bollinger_Upper: nan, Bollinger_Middle: nan, Bollinger_Lower: nan, Average_Volume_20: nan
+DIA: 0.48%, Action: hold, TP: 405.97, Max Profit: 1.83%, Duration: 0.00 hours, SMA_20: nan, EMA_20: 403.45, RSI_14: nan, Bollinger_Upper: nan, Bollinger_Middle: nan, Bollinger_Lower: nan, Average_Volume_20: nan
+VNQ: 0.58%, Action: hold, TP: 89.57, Max Profit: 1.91%, Duration: 0.00 hours, SMA_20: nan, EMA_20: 89.44, RSI_14: nan, Bollinger_Upper: nan, Bollinger_Middle: nan, Bollinger_Lower: nan, Average_Volume_20: nan
+^GDAXI: 0.80%, Action: hold, TP: 18417.55, Max Profit: 1.42%, Duration: 0.00 hours, SMA_20: nan, EMA_20: 18407.83, RSI_14: nan, Bollinger_Upper: nan, Bollinger_Middle: nan, Bollinger_Lower: nan, Average_Volume_20: nan
+IWM: 3.00%, Action: buy, TP: 228.70, Max Profit: 2.92%, Duration: 4.40 hours, SMA_20: nan, EMA_20: 220.66, RSI_14: nan, Bollinger_Upper: nan, Bollinger_Middle: nan, Bollinger_Lower: nan, Average_Volume_20: nan
 
 Top 5 Losers ETFs (5 Days):
-QQQ: -3.78%, Action: short, TP: 453.71, Max Profit: 5.25%, Duration: 1.99 hours
-XLK: -3.36%, Action: short, TP: 211.95, Max Profit: 5.87%, Duration: 1.84 hours
-MCHI: -3.21%, Action: short, TP: 40.42, Max Profit: 4.44%, Duration: 2.23 hours
-FXI: -2.93%, Action: short, TP: 25.01, Max Profit: 3.82%, Duration: 2.49 hours
-LIT: -2.70%, Action: short, TP: 38.21, Max Profit: 5.61%, Duration: 2.98 hours
+QQQ: -3.78%, Action: short, TP: 453.71, Max Profit: 5.25%, Duration: 1.99 hours, SMA_20: nan, EMA_20: 476.81, RSI_14: nan, Bollinger_Upper: nan, Bollinger_Middle: nan, Bollinger_Lower: nan, Average_Volume_20: nan
+XLK: -3.36%, Action: short, TP: 211.95, Max Profit: 5.87%, Duration: 1.84 hours, SMA_20: nan, EMA_20: 223.22, RSI_14: nan, Bollinger_Upper: nan, Bollinger_Middle: nan, Bollinger_Lower: nan, Average_Volume_20: nan
+MCHI: -3.21%, Action: short, TP: 40.42, Max Profit: 4.44%, Duration: 2.23 hours, SMA_20: nan, EMA_20: 42.31, RSI_14: nan, Bollinger_Upper: nan, Bollinger_Middle: nan, Bollinger_Lower: nan, Average_Volume_20: nan
+FXI: -2.93%, Action: short, TP: 25.01, Max Profit: 3.82%, Duration: 2.49 hours, SMA_20: nan, EMA_20: 26.12, RSI_14: nan, Bollinger_Upper: nan, Bollinger_Middle: nan, Bollinger_Lower: nan, Average_Volume_20: nan
+LIT: -2.70%, Action: short, TP: 38.21, Max Profit: 5.61%, Duration: 2.98 hours, SMA_20: nan, EMA_20: 39.61, RSI_14: nan, Bollinger_Upper: nan, Bollinger_Middle: nan, Bollinger_Lower: nan, Average_Volume_20: nan
 
 Top 5 Gainers CFDs (Last Day):
 
 Top 5 Losers CFDs (Last Day):
 
 Top 5 Gainers Forex Pairs (Last Day):
-AUDUSD=X: -1.41%, Action: hold, TP: 0.66, Max Profit: 3.50%, Duration: 0.00 hours
-USDCAD=X: 1.26%, Action: hold, TP: 1.38, Max Profit: 1.58%, Duration: 0.00 hours
-GBPUSD=X: 1.48%, Action: hold, TP: 1.29, Max Profit: 3.06%, Duration: 0.00 hours
+AUDUSD=X: -1.41%, Action: hold, TP: 0.66, Max Profit: 3.50%, Duration: 0.00 hours, SMA_20: 0.67, EMA_20: 0.67, RSI_14: 14.28, Bollinger_Upper: 0.68, Bollinger_Middle: 0.67, Bollinger_Lower: 0.65, Average_Volume_20: 0.00
+USDCAD=X: 1.26%, Action: hold, TP: 1.38, Max Profit: 1.58%, Duration: 0.00 hours, SMA_20: 1.37, EMA_20: 1.37, RSI_14: 92.03, Bollinger_Upper: 1.38, Bollinger_Middle: 1.37, Bollinger_Lower: 1.36, Average_Volume_20: 0.00
+GBPUSD=X: 1.48%, Action: hold, TP: 1.29, Max Profit: 3.06%, Duration: 0.00 hours, SMA_20: 1.29, EMA_20: 1.29, RSI_14: 56.89, Bollinger_Upper: 1.31, Bollinger_Middle: 1.29, Bollinger_Lower: 1.26, Average_Volume_20: 0.00
 
 Top 5 Losers Forex Pairs (Last Day):
-AUDUSD=X: -1.41%, Action: hold, TP: 0.66, Max Profit: 3.50%, Duration: 0.00 hours
-USDCAD=X: 1.26%, Action: hold, TP: 1.38, Max Profit: 1.58%, Duration: 0.00 hours
-GBPUSD=X: 1.48%, Action: hold, TP: 1.29, Max Profit: 3.06%, Duration: 0.00 hours
+AUDUSD=X: -1.41%, Action: hold, TP: 0.66, Max Profit: 3.50%, Duration: 0.00 hours, SMA_20: 0.67, EMA_20: 0.67, RSI_14: 14.28, Bollinger_Upper: 0.68, Bollinger_Middle: 0.67, Bollinger_Lower: 0.65, Average_Volume_20: 0.00
+USDCAD=X: 1.26%, Action: hold, TP: 1.38, Max Profit: 1.58%, Duration: 0.00 hours, SMA_20: 1.37, EMA_20: 1.37, RSI_14: 92.03, Bollinger_Upper: 1.38, Bollinger_Middle: 1.37, Bollinger_Lower: 1.36, Average_Volume_20: 0.00
+GBPUSD=X: 1.48%, Action: hold, TP: 1.29, Max Profit: 3.06%, Duration: 0.00 hours, SMA_20: 1.29, EMA_20: 1.29, RSI_14: 56.89, Bollinger_Upper: 1.31, Bollinger_Middle: 1.29, Bollinger_Lower: 1.26, Average_Volume_20: 0.00
