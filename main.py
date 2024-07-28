@@ -2,22 +2,22 @@ import logging
 import os
 from data_fetcher import get_etf_symbols, get_cfd_symbols, get_forex_symbols, get_data
 from movers_calculator import get_top_movers
-from analyzer import analyze_data
-from file_writer import write_to_file
+from analyzer import analyze_data, analyze_movement, estimate_max_profit, calculate_tp
+from file_writer import write_to_csv
 from technical_indicators import add_technical_indicators
 from visualization import plot_price_and_indicators, plot_backtest_results
 from backtesting import backtest_strategy, simple_moving_average_strategy, simple_strategy, rsi_strategy, write_backtest_log
 
 # Fichiers à supprimer
 log_file = 'trade.log'
-txt_file = 'trade.txt'
+csv_file = 'trade.csv'
 backtest_log_file = 'backtest_log.txt'
 
 # Supprimer les fichiers s'ils existent
 if os.path.exists(log_file):
     os.remove(log_file)
-if os.path.exists(txt_file):
-    os.remove(txt_file)
+if os.path.exists(csv_file):
+    os.remove(csv_file)
 if os.path.exists(backtest_log_file):
     os.remove(backtest_log_file)
 
@@ -80,8 +80,52 @@ def main():
         logging.info("Analyzing data and adding technical indicators")
         results = analyze_data(top_gainers_etf, top_losers_etf, etf_data, top_gainers_cfd, top_losers_cfd, cfd_data, top_gainers_forex, top_losers_forex, forex_data)
         
-        # Écrire les résultats dans le fichier
-        write_to_file('trade.txt', results)
+        # Préparer les résultats au format CSV
+        csv_lines = [["Category", "Symbol", "Percent Change", "Action", "TP", "Max Profit"]]
+        csv_lines += [["Top Gainers ETFs (5 Days)"]]
+        for item in top_gainers_etf:
+            action = analyze_movement(item[1])
+            max_profit = estimate_max_profit(item[0], etf_data)
+            tp = calculate_tp(item[0], etf_data, action)
+            csv_lines.append(["ETF Gainers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
+        
+        csv_lines += [["Top Losers ETFs (5 Days)"]]
+        for item in top_losers_etf:
+            action = analyze_movement(item[1])
+            max_profit = estimate_max_profit(item[0], etf_data)
+            tp = calculate_tp(item[0], etf_data, action)
+            csv_lines.append(["ETF Losers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
+        
+        csv_lines += [["Top Gainers CFDs (Last Day)"]]
+        for item in top_gainers_cfd:
+            action = analyze_movement(item[1])
+            max_profit = estimate_max_profit(item[0], cfd_data)
+            tp = calculate_tp(item[0], cfd_data, action)
+            csv_lines.append(["CFD Gainers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
+        
+        csv_lines += [["Top Losers CFDs (Last Day)"]]
+        for item in top_losers_cfd:
+            action = analyze_movement(item[1])
+            max_profit = estimate_max_profit(item[0], cfd_data)
+            tp = calculate_tp(item[0], cfd_data, action)
+            csv_lines.append(["CFD Losers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
+        
+        csv_lines += [["Top Gainers Forex Pairs (Last Day)"]]
+        for item in top_gainers_forex:
+            action = analyze_movement(item[1])
+            max_profit = estimate_max_profit(item[0], forex_data)
+            tp = calculate_tp(item[0], forex_data, action)
+            csv_lines.append(["Forex Gainers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
+        
+        csv_lines += [["Top Losers Forex Pairs (Last Day)"]]
+        for item in top_losers_forex:
+            action = analyze_movement(item[1])
+            max_profit = estimate_max_profit(item[0], forex_data)
+            tp = calculate_tp(item[0], forex_data, action)
+            csv_lines.append(["Forex Losers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
+
+        # Écrire les résultats dans le fichier CSV
+        write_to_csv('trade.csv', csv_lines)
         
         # Visualisation des données pour les top gainers et losers
         logging.info("Adding technical indicators for ETF data")
