@@ -28,7 +28,7 @@ def plot_backtest_results(symbol, data, trading_log, output_dir):
 def plot_regression_results(X_test, y_test, y_pred, output_dir):
     plt.figure(figsize=(10, 6))
     plt.scatter(X_test.index, y_test, color='blue', label='Actual')
-    plt.scatter(X_test.index, y_pred, color='red', label='Predicted')
+    plt.plot(X_test.index, y_pred, color='red', label='Predicted')
     plt.xlabel('Index')
     plt.ylabel('Price')
     plt.title('Regression Model Results')

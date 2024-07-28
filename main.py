@@ -41,6 +41,21 @@ def check_close_column(data, symbols):
             missing_close.append(symbol)
     return missing_close
 
+def ensure_minimum_forex_pairs(top_gainers_forex, top_losers_forex, all_forex_symbols, minimum_count=5):
+    all_forex_set = set(all_forex_symbols)
+    selected_forex = set([item[0] for item in top_gainers_forex + top_losers_forex])
+
+    while len(selected_forex) < minimum_count and all_forex_set:
+        symbol = all_forex_set.pop()
+        if symbol not in selected_forex:
+            selected_forex.add(symbol)
+            top_gainers_forex.append((symbol, 0))  # Adding with zero change if not enough pairs
+            if len(top_gainers_forex) > minimum_count:
+                break
+            top_losers_forex.append((symbol, 0))
+    
+    return top_gainers_forex[:minimum_count], top_losers_forex[:minimum_count]
+
 def main():
     logging.info('Starting main script')
     try:
@@ -75,12 +90,15 @@ def main():
         if missing_close_forex:
             raise ValueError(f"Column 'Close' not found in Forex data for symbols: {missing_close_forex}")
 
+        # S'assurer d'avoir au moins 5 paires Forex dans les résultats
+        top_gainers_forex, top_losers_forex = ensure_minimum_forex_pairs(top_gainers_forex, top_losers_forex, forex_symbols, minimum_count=5)
+
         # Analyser les données et ajouter les indicateurs techniques
         logging.info("Analyzing data and adding technical indicators")
         results = analyze_data(top_gainers_etf, top_losers_etf, etf_data, top_gainers_cfd, top_losers_cfd, cfd_data, top_gainers_forex, top_losers_forex, forex_data)
         
         # Préparer les résultats au format CSV
-        csv_lines = [["Category", "Symbol", "Percent Change", "Action", "TP", "Max Profit", "Duration"]]
+        csv_lines = [["Category", "Symbol", "Percent Change", "Action", "TP", "Max Profit", "Duration", "Predicted Price", "Comments"]]
         csv_lines += [["Top Gainers ETFs (5 Days)"]]
         for item in top_gainers_etf:
             symbol, change = item
@@ -88,7 +106,14 @@ def main():
             max_profit = estimate_max_profit(symbol, etf_data)
             tp = calculate_tp(symbol, etf_data, action)
             duration = estimate_duration(symbol, etf_data, action)
-            csv_lines.append(["ETF Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
+            
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(etf_data[symbol].dropna(), 'Close')
+            predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            comments = "Consistent" if action == "hold" and change > 0 else "Contradictory"
+            
+            csv_lines.append(["ETF Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
 
         csv_lines += [["Top Losers ETFs (5 Days)"]]
         for item in top_losers_etf:
@@ -97,7 +122,14 @@ def main():
             max_profit = estimate_max_profit(symbol, etf_data)
             tp = calculate_tp(symbol, etf_data, action)
             duration = estimate_duration(symbol, etf_data, action)
-            csv_lines.append(["ETF Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
+            
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(etf_data[symbol].dropna(), 'Close')
+            predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            comments = "Consistent" if action == "short" and predicted_price < etf_data[symbol]['Close'].iloc[-1] else "Contradictory"
+            
+            csv_lines.append(["ETF Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
 
         csv_lines += [["Top Gainers CFDs (Last Day)"]]
         for item in top_gainers_cfd:
@@ -106,7 +138,14 @@ def main():
             max_profit = estimate_max_profit(symbol, cfd_data)
             tp = calculate_tp(symbol, cfd_data, action)
             duration = estimate_duration(symbol, cfd_data, action)
-            csv_lines.append(["CFD Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
+            
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(cfd_data[symbol].dropna(), 'Close')
+            predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            comments = "Consistent" if action == "hold" and change > 0 else "Contradictory"
+            
+            csv_lines.append(["CFD Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
 
         csv_lines += [["Top Losers CFDs (Last Day)"]]
         for item in top_losers_cfd:
@@ -115,7 +154,14 @@ def main():
             max_profit = estimate_max_profit(symbol, cfd_data)
             tp = calculate_tp(symbol, cfd_data, action)
             duration = estimate_duration(symbol, cfd_data, action)
-            csv_lines.append(["CFD Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
+            
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(cfd_data[symbol].dropna(), 'Close')
+            predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            comments = "Consistent" if action == "short" and predicted_price < cfd_data[symbol]['Close'].iloc[-1] else "Contradictory"
+            
+            csv_lines.append(["CFD Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
 
         csv_lines += [["Top Gainers Forex Pairs (Last Day)"]]
         for item in top_gainers_forex:
@@ -124,7 +170,14 @@ def main():
             max_profit = estimate_max_profit(symbol, forex_data)
             tp = calculate_tp(symbol, forex_data, action)
             duration = estimate_duration(symbol, forex_data, action)
-            csv_lines.append(["Forex Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
+            
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(forex_data[symbol].dropna(), 'Close')
+            predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            comments = "Consistent" if action == "hold" and change > 0 else "Contradictory"
+            
+            csv_lines.append(["Forex Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
 
         csv_lines += [["Top Losers Forex Pairs (Last Day)"]]
         for item in top_losers_forex:
@@ -133,7 +186,14 @@ def main():
             max_profit = estimate_max_profit(symbol, forex_data)
             tp = calculate_tp(symbol, forex_data, action)
             duration = estimate_duration(symbol, forex_data, action)
-            csv_lines.append(["Forex Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
+            
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(forex_data[symbol].dropna(), 'Close')
+            predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            comments = "Consistent" if action == "short" and predicted_price < forex_data[symbol]['Close'].iloc[-1] else "Contradictory"
+            
+            csv_lines.append(["Forex Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
 
         # Écrire les résultats dans le fichier CSV
         write_to_csv(csv_file, csv_lines)
