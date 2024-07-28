@@ -1,111 +1,64 @@
+import logging
 import pandas as pd
 import numpy as np
-import logging
-
-def backtest_strategy(data, symbol, strategy_func, initial_balance=10000):
-    logging.info(f"Backtesting strategy for {symbol}")
-    
-    if 'Close' not in data.columns:
-        logging.error(f"'Close' column not found in data for {symbol}")
-        return None, []
-
-    balance = initial_balance
-    position = 0
-    trading_log = []
-
-    for i in range(1, len(data)):
-        price = data['Close'].iloc[i]
-        action = strategy_func(data.iloc[:i])
-        
-        if action == 'buy' and balance > price:
-            # Buy one unit
-            balance -= price
-            position += 1
-            trading_log.append((data.index[i], 'buy', price, balance))
-        elif action == 'short' and position > 0:
-            # Sell one unit
-            balance += price
-            position -= 1
-            trading_log.append((data.index[i], 'sell', price, balance))
-        
-        # Log each action
-        logging.debug(f"Date: {data.index[i]}, Action: {action}, Price: {price}, Balance: {balance}, Position: {position}")
-    
-    # Calculate final portfolio value
-    final_value = balance + position * data['Close'].iloc[-1]
-    logging.info(f"Final portfolio value for {symbol}: {final_value}")
-
-    return final_value, trading_log
 
 def simple_moving_average_strategy(data, short_window=40, long_window=100):
     signals = pd.DataFrame(index=data.index)
     signals['signal'] = 0.0
 
-    # Create short simple moving average
     signals['short_mavg'] = data['Close'].rolling(window=short_window, min_periods=1, center=False).mean()
-
-    # Create long simple moving average
     signals['long_mavg'] = data['Close'].rolling(window=long_window, min_periods=1, center=False).mean()
 
-    # Ensure the lengths match when assigning signals
-    signals.loc[signals.index[short_window:], 'signal'] = np.where(
-        signals.loc[signals.index[short_window:], 'short_mavg'] > signals.loc[signals.index[short_window:], 'long_mavg'], 1.0, 0.0
-    )
+    signals['signal'][short_window:] = np.where(
+        signals['short_mavg'][short_window:] > signals['long_mavg'][short_window:], 1.0, 0.0)
 
-    # Generate trading orders
     signals['positions'] = signals['signal'].diff()
 
-    def strategy_func(data):
-        if len(signals) > 0:
-            if signals['positions'].iloc[-1] == 1:
-                return 'buy'
-            elif signals['positions'].iloc[-1] == -1:
-                return 'short'
-            else:
-                return 'hold'
-        else:
-            return 'hold'
+    return signals
 
-    return strategy_func
+def backtest_strategy(data, symbol, signals, initial_balance=10000.0):
+    positions = pd.DataFrame(index=signals.index).fillna(0.0)
+    positions[symbol] = signals['signal']
+    portfolio = positions.multiply(data['Close'], axis=0)
+    pos_diff = positions.diff()
+    portfolio['holdings'] = (positions.multiply(data['Close'], axis=0)).sum(axis=1)
+    portfolio['cash'] = initial_balance - (pos_diff.multiply(data['Close'], axis=0)).sum(axis=1).cumsum()
+    portfolio['total'] = portfolio['cash'] + portfolio['holdings']
+    trading_log = []
 
-def rsi_strategy(data, window=14, buy_threshold=30, sell_threshold=70):
-    signals = pd.DataFrame(index=data.index)
-    signals['RSI'] = calculate_rsi(data, window)
+    for date in portfolio.index:
+        if signals['positions'].loc[date] == 1.0:
+            trading_log.append((date, 'buy', data['Close'].loc[date], portfolio['total'].loc[date]))
+        elif signals['positions'].loc[date] == -1.0:
+            trading_log.append((date, 'sell', data['Close'].loc[date], portfolio['total'].loc[date]))
 
-    def strategy_func(data):
-        if signals['RSI'].iloc[-1] < buy_threshold:
-            return 'buy'
-        elif signals['RSI'].iloc[-1] > sell_threshold:
-            return 'short'
-        else:
-            return 'hold'
-
-    return strategy_func
+    return portfolio['total'].iloc[-1], trading_log
 
 def simple_strategy(data):
-    """A simple strategy that buys if the close price is greater than the open price."""
-    def strategy_func(data):
-        if data['Close'].iloc[-1] > data['Open'].iloc[-1]:
-            return 'buy'
-        else:
-            return 'hold'
-    return strategy_func
+    signals = pd.DataFrame(index=data.index)
+    signals['signal'] = 0.0
+    signals['signal'][10:] = np.where(data['Close'][10:] > data['Close'].shift(1)[10:], 1.0, 0.0)
+    signals['positions'] = signals['signal'].diff()
+    return signals
 
-def calculate_rsi(data, window=14):
+def rsi_strategy(data, window=14):
     delta = data['Close'].diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
     loss = (-delta.where(delta < 0, 0)).rolling(window=window).mean()
-    rs = gain / loss
-    rsi = 100 - (100 / (1 + rs))
-    return rsi
+    RS = gain / loss
+    data['RSI'] = 100 - (100 / (1 + RS))
+    signals = pd.DataFrame(index=data.index)
+    signals['signal'] = 0.0
+    signals['signal'][window:] = np.where(data['RSI'][window:] > 70, -1.0, np.where(data['RSI'][window:] < 30, 1.0, 0.0))
+    signals['positions'] = signals['signal'].diff()
+    return signals
 
-def write_backtest_log(symbol, trading_log, filename='backtest_log.txt'):
+def write_backtest_log(symbol, trading_log, log_file):
     try:
-        with open(filename, 'a') as f:
-            f.write(f"Backtesting results for {symbol}:\n")
+        with open(log_file, 'a') as file:
+            file.write(f'Backtesting results for {symbol}:\n')
             for log in trading_log:
-                f.write(f"{log[0]}, {log[1]}, Price: {log[2]}, Balance: {log[3]}\n")
-            f.write("\n")
-        logging.info(f"Backtesting log written to {filename}")
+                file.write(f'{log[0]}, {log[1]}, Price: {log[2]}, Balance: {log[3]}\n')
+        logging.info(f'Backtesting log successfully written to file: {log_file}')
     except Exception as e:
-        logging.error(f"Error writing backtesting log: {e}")
+        logging.error(f'Error writing backtesting log to file: {e}')
