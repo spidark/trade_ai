@@ -2,10 +2,10 @@ import logging
 import os
 from data_fetcher import get_etf_symbols, get_cfd_symbols, get_forex_symbols, get_data
 from movers_calculator import get_top_movers
-from analyzer import analyze_data, analyze_movement, estimate_max_profit, calculate_tp
+from analyzer import analyze_data, analyze_movement, estimate_max_profit, calculate_tp, estimate_duration
 from file_writer import write_to_csv
 from technical_indicators import add_technical_indicators
-from visualization import plot_price_and_indicators, plot_backtest_results
+from visualization import plot_price_and_indicators, plot_backtest_results, plot_regression_results, plot_clustering_results
 from backtesting import backtest_strategy, simple_moving_average_strategy, simple_strategy, rsi_strategy, write_backtest_log
 from machine_learning import train_regression_model, predict_price, train_clustering_model, cluster_data
 
@@ -29,7 +29,7 @@ if not os.path.exists(output_dir):
 
 # Configuration de la journalisation
 logging.basicConfig(filename=log_file, level=logging.DEBUG, 
-                    format='%(asctime)s %(levelname)s:%(message)s')
+                    format='%(asctime)s %(levelname)s: %(message)s')
 
 def check_close_column(data, symbols):
     missing_close = []
@@ -80,76 +80,88 @@ def main():
         results = analyze_data(top_gainers_etf, top_losers_etf, etf_data, top_gainers_cfd, top_losers_cfd, cfd_data, top_gainers_forex, top_losers_forex, forex_data)
         
         # Préparer les résultats au format CSV
-        csv_lines = [["Category", "Symbol", "Percent Change", "Action", "TP", "Max Profit"]]
+        csv_lines = [["Category", "Symbol", "Percent Change", "Action", "TP", "Max Profit", "Duration"]]
         csv_lines += [["Top Gainers ETFs (5 Days)"]]
         for item in top_gainers_etf:
-            action = analyze_movement(float(item[1]))
-            max_profit = estimate_max_profit(item[0], etf_data)
-            tp = calculate_tp(item[0], etf_data, action)
-            csv_lines.append(["ETF Gainers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
-        
+            symbol, change = item
+            action = analyze_movement(float(change))
+            max_profit = estimate_max_profit(symbol, etf_data)
+            tp = calculate_tp(symbol, etf_data, action)
+            duration = estimate_duration(symbol, etf_data, action)
+            csv_lines.append(["ETF Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
+
         csv_lines += [["Top Losers ETFs (5 Days)"]]
         for item in top_losers_etf:
-            action = analyze_movement(float(item[1]))
-            max_profit = estimate_max_profit(item[0], etf_data)
-            tp = calculate_tp(item[0], etf_data, action)
-            csv_lines.append(["ETF Losers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
-        
+            symbol, change = item
+            action = analyze_movement(float(change))
+            max_profit = estimate_max_profit(symbol, etf_data)
+            tp = calculate_tp(symbol, etf_data, action)
+            duration = estimate_duration(symbol, etf_data, action)
+            csv_lines.append(["ETF Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
+
         csv_lines += [["Top Gainers CFDs (Last Day)"]]
         for item in top_gainers_cfd:
-            action = analyze_movement(float(item[1]))
-            max_profit = estimate_max_profit(item[0], cfd_data)
-            tp = calculate_tp(item[0], cfd_data, action)
-            csv_lines.append(["CFD Gainers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
-        
+            symbol, change = item
+            action = analyze_movement(float(change))
+            max_profit = estimate_max_profit(symbol, cfd_data)
+            tp = calculate_tp(symbol, cfd_data, action)
+            duration = estimate_duration(symbol, cfd_data, action)
+            csv_lines.append(["CFD Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
+
         csv_lines += [["Top Losers CFDs (Last Day)"]]
         for item in top_losers_cfd:
-            action = analyze_movement(float(item[1]))
-            max_profit = estimate_max_profit(item[0], cfd_data)
-            tp = calculate_tp(item[0], cfd_data, action)
-            csv_lines.append(["CFD Losers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
-        
+            symbol, change = item
+            action = analyze_movement(float(change))
+            max_profit = estimate_max_profit(symbol, cfd_data)
+            tp = calculate_tp(symbol, cfd_data, action)
+            duration = estimate_duration(symbol, cfd_data, action)
+            csv_lines.append(["CFD Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
+
         csv_lines += [["Top Gainers Forex Pairs (Last Day)"]]
         for item in top_gainers_forex:
-            action = analyze_movement(float(item[1]))
-            max_profit = estimate_max_profit(item[0], forex_data)
-            tp = calculate_tp(item[0], forex_data, action)
-            csv_lines.append(["Forex Gainers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
-        
+            symbol, change = item
+            action = analyze_movement(float(change))
+            max_profit = estimate_max_profit(symbol, forex_data)
+            tp = calculate_tp(symbol, forex_data, action)
+            duration = estimate_duration(symbol, forex_data, action)
+            csv_lines.append(["Forex Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
+
         csv_lines += [["Top Losers Forex Pairs (Last Day)"]]
         for item in top_losers_forex:
-            action = analyze_movement(float(item[1]))
-            max_profit = estimate_max_profit(item[0], forex_data)
-            tp = calculate_tp(item[0], forex_data, action)
-            csv_lines.append(["Forex Losers", item[0], f"{item[1]:.2f}%", action, f"{tp:.2f}", f"{max_profit:.2f}%"])
+            symbol, change = item
+            action = analyze_movement(float(change))
+            max_profit = estimate_max_profit(symbol, forex_data)
+            tp = calculate_tp(symbol, forex_data, action)
+            duration = estimate_duration(symbol, forex_data, action)
+            csv_lines.append(["Forex Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}"])
 
         # Écrire les résultats dans le fichier CSV
-        write_to_csv('trade.csv', csv_lines)
-        
-        # Visualisation des données pour les top gainers et losers
-        logging.info("Adding technical indicators for ETF data")
-        etf_indicators = add_technical_indicators(etf_data)
-        for symbol, _ in top_gainers_etf + top_losers_etf:
+        write_to_csv(csv_file, csv_lines)
+
+        # Visualisation des données
+        for item in top_gainers_etf + top_losers_etf:
+            symbol, _ = item
             logging.info(f"Plotting price and indicators for ETF: {symbol}")
             if symbol in etf_data and 'Close' in etf_data[symbol].columns:
+                etf_indicators = add_technical_indicators(etf_data[symbol])
                 plot_price_and_indicators(symbol, etf_data[symbol], etf_indicators, output_dir)
             else:
                 logging.error(f"Column 'Close' not found in ETF data for symbol: {symbol}")
-        
-        logging.info("Adding technical indicators for CFD data")
-        cfd_indicators = add_technical_indicators(cfd_data)
-        for symbol, _ in top_gainers_cfd + top_losers_cfd:
+
+        for item in top_gainers_cfd + top_losers_cfd:
+            symbol, _ = item
             logging.info(f"Plotting price and indicators for CFD: {symbol}")
             if symbol in cfd_data and 'Close' in cfd_data[symbol].columns:
+                cfd_indicators = add_technical_indicators(cfd_data[symbol])
                 plot_price_and_indicators(symbol, cfd_data[symbol], cfd_indicators, output_dir)
             else:
                 logging.error(f"Column 'Close' not found in CFD data for symbol: {symbol}")
-        
-        logging.info("Adding technical indicators for Forex data")
-        forex_indicators = add_technical_indicators(forex_data)
-        for symbol, _ in top_gainers_forex + top_losers_forex:
+
+        for item in top_gainers_forex + top_losers_forex:
+            symbol, _ = item
             logging.info(f"Plotting price and indicators for Forex: {symbol}")
             if symbol in forex_data and 'Close' in forex_data[symbol].columns:
+                forex_indicators = add_technical_indicators(forex_data[symbol])
                 plot_price_and_indicators(symbol, forex_data[symbol], forex_indicators, output_dir)
             else:
                 logging.error(f"Column 'Close' not found in Forex data for symbol: {symbol}")
@@ -158,13 +170,19 @@ def main():
         for symbol in etf_symbols:
             logging.debug(f"Data for {symbol}: {etf_data[symbol].head()}")
             strategy = simple_moving_average_strategy(etf_data[symbol])
+            if strategy.empty:
+                logging.error(f"Strategy for {symbol} could not be computed.")
+                continue
             final_value, trading_log = backtest_strategy(etf_data[symbol], symbol, strategy)
             logging.info(f"Backtesting {symbol}: Final portfolio value: {final_value}")
             write_backtest_log(symbol, trading_log, backtest_log_file)
             plot_backtest_results(symbol, etf_data[symbol], trading_log, output_dir)
-            
+
             # Test with simple strategy
             simple_strat = simple_strategy(etf_data[symbol])
+            if simple_strat.empty:
+                logging.error(f"Simple strategy for {symbol} could not be computed.")
+                continue
             final_value, trading_log = backtest_strategy(etf_data[symbol], symbol, simple_strat)
             logging.info(f"Backtesting with simple strategy {symbol}: Final portfolio value: {final_value}")
             write_backtest_log(f"{symbol}_simple_strategy", trading_log, backtest_log_file)
@@ -172,11 +190,30 @@ def main():
 
             # Test with RSI strategy
             rsi_strat = rsi_strategy(etf_data[symbol])
+            if rsi_strat.empty:
+                logging.error(f"RSI strategy for {symbol} could not be computed.")
+                continue
             final_value, trading_log = backtest_strategy(etf_data[symbol], symbol, rsi_strat)
             logging.info(f"Backtesting with RSI strategy {symbol}: Final portfolio value: {final_value}")
             write_backtest_log(f"{symbol}_rsi_strategy", trading_log, backtest_log_file)
             plot_backtest_results(f"{symbol}_rsi_strategy", etf_data[symbol], trading_log, output_dir)
-        
+
+            # Train regression model and plot results
+            clean_data = etf_data[symbol].dropna()
+            if not clean_data.empty:
+                model, mse, X_test, y_test, y_pred = train_regression_model(clean_data, 'Close')
+                if model:
+                    logging.info(f"Trained regression model for {symbol} with MSE: {mse}")
+                    plot_regression_results(X_test, y_test, y_pred, output_dir)
+
+            # Train clustering model and plot results
+            clustering_data = etf_data[symbol][['Close', 'Volume']].dropna()
+            if not clustering_data.empty:
+                clusters_model, silhouette_avg, clusters = train_clustering_model(clustering_data, n_clusters=3)
+                if clusters_model:
+                    logging.info(f"Trained clustering model for {symbol} with silhouette score: {silhouette_avg}")
+                    plot_clustering_results(clustering_data, clusters, output_dir)
+
         logging.info('Script completed successfully')
     except Exception as e:
         logging.error(f'Error in main script: {e}', exc_info=True)

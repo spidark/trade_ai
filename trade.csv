@@ -1,21 +1,21 @@
-Category,Symbol,Percent Change,Action,TP,Max Profit
+Category,Symbol,Percent Change,Action,TP,Max Profit,Duration
 Top Gainers ETFs (5 Days)
-ETF Gainers,GLD,-0.43%,hold,220.63,1.95%
-ETF Gainers,DIA,0.48%,hold,405.97,1.83%
-ETF Gainers,VNQ,0.58%,hold,89.57,1.91%
-ETF Gainers,^GDAXI,0.80%,hold,18417.55,1.42%
-ETF Gainers,IWM,3.00%,buy,228.70,2.92%
+ETF Gainer,GLD,-0.43,hold,220.63,1.95,0.00
+ETF Gainer,DIA,0.48,hold,405.97,1.83,0.00
+ETF Gainer,VNQ,0.58,hold,89.57,1.91,0.00
+ETF Gainer,^GDAXI,0.80,hold,18417.55,1.42,0.00
+ETF Gainer,IWM,3.00,buy,228.70,2.92,4.40
 Top Losers ETFs (5 Days)
-ETF Losers,QQQ,-3.78%,short,453.71,5.25%
-ETF Losers,XLK,-3.36%,short,211.95,5.87%
-ETF Losers,MCHI,-3.21%,short,40.42,4.44%
-ETF Losers,FXI,-2.93%,short,25.01,3.82%
-ETF Losers,LIT,-2.70%,short,38.21,5.61%
+ETF Loser,QQQ,-3.78,short,453.71,5.25,1.99
+ETF Loser,XLK,-3.36,short,211.95,5.87,1.84
+ETF Loser,MCHI,-3.21,short,40.42,4.44,2.23
+ETF Loser,FXI,-2.93,short,25.01,3.82,2.49
+ETF Loser,LIT,-2.70,short,38.21,5.61,2.98
 Top Gainers CFDs (Last Day)
 Top Losers CFDs (Last Day)
 Top Gainers Forex Pairs (Last Day)
-Forex Gainers,AUDUSD=X,-1.41%,hold,0.66,3.50%
-Forex Gainers,USDCAD=X,1.26%,hold,1.38,1.58%
+Forex Gainer,AUDUSD=X,-1.41,hold,0.66,3.50,0.00
+Forex Gainer,USDCAD=X,1.26,hold,1.38,1.58,0.00
 Top Losers Forex Pairs (Last Day)
-Forex Losers,AUDUSD=X,-1.41%,hold,0.66,3.50%
-Forex Losers,USDCAD=X,1.26%,hold,1.38,1.58%
+Forex Loser,AUDUSD=X,-1.41,hold,0.66,3.50,0.00
+Forex Loser,USDCAD=X,1.26,hold,1.38,1.58,0.00
