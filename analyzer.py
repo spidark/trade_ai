@@ -40,13 +40,17 @@ def estimate_duration(symbol, data, action):
 def add_technical_indicators(data):
     data['SMA'] = data['Close'].rolling(window=20).mean()
     data['EMA'] = data['Close'].ewm(span=20, adjust=False).mean()
-    delta = data['Close'].diff()
-    gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
-    loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
-    RS = gain / loss
-    data['RSI'] = 100 - (100 / (1 + RS))
+    data['RSI'] = calculate_rsi(data['Close'])
     data['Upper_BB'], data['Lower_BB'] = calculate_bollinger_bands(data['Close'])
+    data = add_multitemp_indicators(data)
     return data
+
+def calculate_rsi(series, period=14):
+    delta = series.diff(1)
+    gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
+    rs = gain / loss
+    return 100 - (100 / (1 + rs))
 
 def calculate_bollinger_bands(close, window=20):
     sma = close.rolling(window).mean()
@@ -54,6 +58,16 @@ def calculate_bollinger_bands(close, window=20):
     upper_bb = sma + (std * 2)
     lower_bb = sma - (std * 2)
     return upper_bb, lower_bb
+
+def add_multitemp_indicators(data):
+    windows = [5, 10, 20]  # Short, medium, long term windows
+    for window in windows:
+        data[f'SMA_{window}'] = calculate_moving_average(data, window)
+        data[f'RSI_{window}'] = calculate_rsi(data['Close'], window)
+    return data
+
+def calculate_moving_average(data, window):
+    return data['Close'].rolling(window=window).mean()
 
 def analyze_data(top_gainers_etf, top_losers_etf, etf_data, top_gainers_cfd, top_losers_cfd, cfd_data, top_gainers_forex, top_losers_forex, forex_data):
     results = []
