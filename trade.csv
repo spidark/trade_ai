@@ -14,14 +14,14 @@ ETF Loser,LIT,-2.70,short,38.21,5.61,2.98,39.17591064070139,39.77,37.43,Contradi
 Top Gainers CFDs (Last Day)
 Top Losers CFDs (Last Day)
 Top Gainers Forex Pairs (Last Day)
-Forex Gainer,USDJPY=X,-3.78,short,150.58,5.19,11.59,157.4219970703125,156.72,147.50,Contradictory
-Forex Gainer,AUDUSD=X,-1.38,hold,0.66,3.50,0.00,0.6696308851242065,0.66,0.66,Contradictory
-Forex Gainer,USDCAD=X,1.27,hold,1.38,1.59,0.00,1.3707000017166138,1.38,1.38,Consistent
-Forex Gainer,EURUSD=X,1.38,hold,1.09,2.44,0.00,1.0899182558059692,1.09,1.09,Consistent
-Forex Gainer,GBPUSD=X,1.42,hold,1.29,3.06,0.00,1.2933096885681152,1.29,1.29,Consistent
+Forex Gainer,USDJPY=X,-3.71,short,150.69,5.16,11.82,157.4219970703125,156.84,147.61,Contradictory
+Forex Gainer,AUDUSD=X,-1.39,hold,0.66,3.50,0.00,0.6696308851242065,0.66,0.66,Contradictory
+Forex Gainer,USDCAD=X,1.24,hold,1.38,1.57,0.00,1.3707000017166138,1.38,1.38,Consistent
+Forex Gainer,GBPUSD=X,1.39,hold,1.29,3.06,0.00,1.2933096885681152,1.29,1.29,Consistent
+Forex Gainer,EURUSD=X,1.44,hold,1.09,2.44,0.00,1.089918255805969,1.09,1.09,Consistent
 Top Losers Forex Pairs (Last Day)
-Forex Loser,USDJPY=X,-3.78,short,150.58,5.19,11.59,157.4219970703125,156.72,147.50,Contradictory
-Forex Loser,AUDUSD=X,-1.38,hold,0.66,3.50,0.00,0.6696308851242065,0.66,0.66,Contradictory
-Forex Loser,USDCAD=X,1.27,hold,1.38,1.59,0.00,1.3707000017166138,1.38,1.38,Contradictory
-Forex Loser,EURUSD=X,1.38,hold,1.09,2.44,0.00,1.0899182558059692,1.09,1.09,Contradictory
-Forex Loser,GBPUSD=X,1.42,hold,1.29,3.06,0.00,1.2933096885681152,1.29,1.29,Contradictory
+Forex Loser,USDJPY=X,-3.71,short,150.69,5.16,11.82,157.4219970703125,156.84,147.61,Contradictory
+Forex Loser,AUDUSD=X,-1.39,hold,0.66,3.50,0.00,0.6696308851242065,0.66,0.66,Contradictory
+Forex Loser,USDCAD=X,1.24,hold,1.38,1.57,0.00,1.3707000017166138,1.38,1.38,Contradictory
+Forex Loser,GBPUSD=X,1.39,hold,1.29,3.06,0.00,1.2933096885681152,1.29,1.29,Contradictory
+Forex Loser,EURUSD=X,1.44,hold,1.09,2.44,0.00,1.089918255805969,1.09,1.09,Contradictory
