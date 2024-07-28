@@ -4,18 +4,27 @@ from data_fetcher import get_etf_symbols, get_cfd_symbols, get_forex_symbols, ge
 from movers_calculator import get_top_movers
 from analyzer import analyze_data
 from file_writer import write_to_file
-from technical_indicators import add_technical_indicators  # Import ajouté
-from visualization import plot_price_and_indicators
+from technical_indicators import add_technical_indicators
+from visualization import plot_price_and_indicators, plot_backtest_results
+from backtesting import backtest_strategy, simple_moving_average_strategy, simple_strategy, rsi_strategy, write_backtest_log
 
 # Fichiers à supprimer
 log_file = 'trade.log'
 txt_file = 'trade.txt'
+backtest_log_file = 'backtest_log.txt'
 
 # Supprimer les fichiers s'ils existent
 if os.path.exists(log_file):
     os.remove(log_file)
 if os.path.exists(txt_file):
     os.remove(txt_file)
+if os.path.exists(backtest_log_file):
+    os.remove(backtest_log_file)
+
+# Créer le répertoire de sortie pour les graphiques
+output_dir = "plots"
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
 # Configuration de la journalisation
 logging.basicConfig(filename=log_file, level=logging.DEBUG, 
@@ -27,42 +36,95 @@ def main():
         # Récupérer les symboles et les données pour les ETF
         etf_symbols = get_etf_symbols()
         etf_data = get_data(etf_symbols, period="5d", interval="1d")
+        logging.debug(f'ETF Data: {etf_data.head()}')
         top_gainers_etf, top_losers_etf = get_top_movers(etf_data)
         
+        # Vérifier que les données ETF contiennent la colonne 'Close'
+        for symbol in etf_symbols:
+            if 'Close' not in etf_data[symbol].columns:
+                raise ValueError(f"Column 'Close' not found in ETF data for symbol: {symbol}")
+            else:
+                logging.debug(f"Column 'Close' found in ETF data for symbol: {symbol}")
+
         # Récupérer les symboles et les données pour les CFD
         cfd_symbols = get_cfd_symbols()
         cfd_data = get_data(cfd_symbols, period="1d", interval="1m")
+        logging.debug(f'CFD Data: {cfd_data.head()}')
         top_gainers_cfd, top_losers_cfd = get_top_movers(cfd_data)
         
+        # Vérifier que les données CFD contiennent la colonne 'Close'
+        for symbol in cfd_symbols:
+            if 'Close' not in cfd_data[symbol].columns:
+                raise ValueError(f"Column 'Close' not found in CFD data for symbol: {symbol}")
+            else:
+                logging.debug(f"Column 'Close' found in CFD data for symbol: {symbol}")
+
         # Journalisation pour CFD
-        logging.debug(f'CFD Data: {cfd_data}')
         logging.debug(f'Top Gainers CFDs: {top_gainers_cfd}')
         logging.debug(f'Top Losers CFDs: {top_losers_cfd}')
 
         # Récupérer les symboles et les données pour les paires Forex
         forex_symbols = get_forex_symbols()
         forex_data = get_data(forex_symbols, period="1mo", interval="1d")
+        logging.debug(f'Forex Data: {forex_data.head()}')
         top_gainers_forex, top_losers_forex = get_top_movers(forex_data)
         
+        # Vérifier que les données Forex contiennent la colonne 'Close'
+        for symbol in forex_symbols:
+            if 'Close' not in forex_data[symbol].columns:
+                raise ValueError(f"Column 'Close' not found in Forex data for symbol: {symbol}")
+            else:
+                logging.debug(f"Column 'Close' found in Forex data for symbol: {symbol}")
+
         # Analyser les données et ajouter les indicateurs techniques
+        logging.info("Analyzing data and adding technical indicators")
         results = analyze_data(top_gainers_etf, top_losers_etf, etf_data, top_gainers_cfd, top_losers_cfd, cfd_data, top_gainers_forex, top_losers_forex, forex_data)
         
         # Écrire les résultats dans le fichier
         write_to_file('trade.txt', results)
         
-        # Visualisation des données
+        # Visualisation des données pour les top gainers et losers
+        logging.info("Adding technical indicators for ETF data")
         etf_indicators = add_technical_indicators(etf_data)
-        for symbol in etf_symbols:
-            plot_price_and_indicators(symbol, etf_data, etf_indicators)
+        for symbol, _ in top_gainers_etf + top_losers_etf:
+            logging.info(f"Plotting price and indicators for ETF: {symbol}")
+            plot_price_and_indicators(symbol, etf_data, etf_indicators, output_dir)
         
+        logging.info("Adding technical indicators for CFD data")
         cfd_indicators = add_technical_indicators(cfd_data)
-        for symbol in cfd_symbols:
-            plot_price_and_indicators(symbol, cfd_data, cfd_indicators)
+        for symbol, _ in top_gainers_cfd + top_losers_cfd:
+            logging.info(f"Plotting price and indicators for CFD: {symbol}")
+            plot_price_and_indicators(symbol, cfd_data, cfd_indicators, output_dir)
         
+        logging.info("Adding technical indicators for Forex data")
         forex_indicators = add_technical_indicators(forex_data)
-        for symbol in forex_symbols:
-            plot_price_and_indicators(symbol, forex_data, forex_indicators)
+        for symbol, _ in top_gainers_forex + top_losers_forex:
+            logging.info(f"Plotting price and indicators for Forex: {symbol}")
+            plot_price_and_indicators(symbol, forex_data, forex_indicators, output_dir)
 
+        # Backtesting des stratégies de trading
+        for symbol in etf_symbols:
+            logging.debug(f"Data for {symbol}: {etf_data[symbol].head()}")
+            strategy = simple_moving_average_strategy(etf_data[symbol])
+            final_value, trading_log = backtest_strategy(etf_data[symbol], symbol, strategy)
+            logging.info(f"Backtesting {symbol}: Final portfolio value: {final_value}")
+            write_backtest_log(symbol, trading_log, backtest_log_file)
+            plot_backtest_results(symbol, etf_data[symbol], trading_log, output_dir)
+            
+            # Test with a simple strategy
+            simple_strat = simple_strategy(etf_data[symbol])
+            final_value, trading_log = backtest_strategy(etf_data[symbol], symbol, simple_strat)
+            logging.info(f"Backtesting with simple strategy {symbol}: Final portfolio value: {final_value}")
+            write_backtest_log(f"{symbol}_simple_strategy", trading_log, backtest_log_file)
+            plot_backtest_results(f"{symbol}_simple_strategy", etf_data[symbol], trading_log, output_dir)
+
+            # Test with RSI strategy
+            rsi_strat = rsi_strategy(etf_data[symbol])
+            final_value, trading_log = backtest_strategy(etf_data[symbol], symbol, rsi_strat)
+            logging.info(f"Backtesting with RSI strategy {symbol}: Final portfolio value: {final_value}")
+            write_backtest_log(f"{symbol}_rsi_strategy", trading_log, backtest_log_file)
+            plot_backtest_results(f"{symbol}_rsi_strategy", etf_data[symbol], trading_log, output_dir)
+        
         logging.info('Script completed successfully')
     except Exception as e:
         logging.error(f'Error in main script: {e}')
