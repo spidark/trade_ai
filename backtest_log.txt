@@ -1,1 +1,66 @@
 Backtesting results for SPY:
+Backtesting results for SPY_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 544.4400024414062, Balance: 10000.0
+Backtesting results for SPY_rsi_strategy:
+Backtesting results for IVV:
+Backtesting results for IVV_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 547.3900146484375, Balance: 10000.0
+Backtesting results for IVV_rsi_strategy:
+Backtesting results for VOO:
+Backtesting results for VOO_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 500.3299865722656, Balance: 10000.0
+Backtesting results for VOO_rsi_strategy:
+Backtesting results for QQQ:
+Backtesting results for QQQ_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 462.9700012207031, Balance: 10000.0
+Backtesting results for QQQ_rsi_strategy:
+Backtesting results for DIA:
+Backtesting results for DIA_simple_strategy:
+2024-07-25 00:00:00, buy, Price: 399.489990234375, Balance: 10000.0
+Backtesting results for DIA_rsi_strategy:
+Backtesting results for IWM:
+Backtesting results for IWM_simple_strategy:
+2024-07-23 00:00:00, buy, Price: 222.6300048828125, Balance: 10000.0
+2024-07-24 00:00:00, sell, Price: 217.85000610351562, Balance: 9995.220001220703
+2024-07-25 00:00:00, buy, Price: 220.57000732421875, Balance: 9995.220001220703
+Backtesting results for IWM_rsi_strategy:
+Backtesting results for VNQ:
+Backtesting results for VNQ_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 89.56999969482422, Balance: 10000.0
+Backtesting results for VNQ_rsi_strategy:
+Backtesting results for GLD:
+Backtesting results for GLD_simple_strategy:
+2024-07-23 00:00:00, buy, Price: 222.5800018310547, Balance: 10000.0
+2024-07-24 00:00:00, sell, Price: 221.8000030517578, Balance: 9999.220001220703
+2024-07-26 00:00:00, buy, Price: 220.6300048828125, Balance: 9999.220001220703
+Backtesting results for GLD_rsi_strategy:
+Backtesting results for XLK:
+Backtesting results for XLK_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 216.27999877929688, Balance: 10000.0
+Backtesting results for XLK_rsi_strategy:
+Backtesting results for EZU:
+Backtesting results for EZU_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 49.4900016784668, Balance: 10000.0
+Backtesting results for EZU_rsi_strategy:
+Backtesting results for MCHI:
+Backtesting results for MCHI_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 41.25, Balance: 10000.0
+Backtesting results for MCHI_rsi_strategy:
+Backtesting results for VGK:
+Backtesting results for VGK_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 68.12000274658203, Balance: 10000.0
+Backtesting results for VGK_rsi_strategy:
+Backtesting results for FXI:
+Backtesting results for FXI_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 25.520000457763672, Balance: 10000.0
+Backtesting results for FXI_rsi_strategy:
+Backtesting results for LIT:
+Backtesting results for LIT_simple_strategy:
+2024-07-25 00:00:00, buy, Price: 38.38999938964844, Balance: 10000.0
+Backtesting results for LIT_rsi_strategy:
+Backtesting results for ^GDAXI:
+Backtesting results for ^GDAXI_simple_strategy:
+2024-07-23 00:00:00, buy, Price: 18557.69921875, Balance: 10000.0
+2024-07-24 00:00:00, sell, Price: 18387.4609375, Balance: 9829.76171875
+2024-07-26 00:00:00, buy, Price: 18417.55078125, Balance: 9829.76171875
+Backtesting results for ^GDAXI_rsi_strategy:
