@@ -1,24 +1,29 @@
-import os
 import matplotlib.pyplot as plt
+import os
 
 def plot_price_and_indicators(symbol, data, indicators, output_dir):
     plt.figure(figsize=(14, 7))
     plt.plot(data['Close'], label='Close Price')
-    for key, value in indicators.items():
-        plt.plot(value, label=key)
-    plt.title(f'Price and Technical Indicators for {symbol}')
+    if 'short_mavg' in indicators:
+        plt.plot(indicators['short_mavg'], label='Short Moving Average')
+    if 'long_mavg' in indicators:
+        plt.plot(indicators['long_mavg'], label='Long Moving Average')
+    if 'RSI' in indicators:
+        plt.plot(indicators['RSI'], label='RSI')
+    plt.title(f'{symbol} Price and Indicators')
     plt.legend()
     plt.savefig(os.path.join(output_dir, f'{symbol}_price_indicators.png'))
     plt.close()
 
 def plot_backtest_results(symbol, data, trading_log, output_dir):
-    plt.figure(figsize=(14, 7))
-    plt.plot(data['Close'], label='Close Price')
     buy_signals = [log for log in trading_log if log[1] == 'buy']
     sell_signals = [log for log in trading_log if log[1] == 'sell']
+    
+    plt.figure(figsize=(14, 7))
+    plt.plot(data['Close'], label='Close Price')
     plt.scatter([log[0] for log in buy_signals], [log[2] for log in buy_signals], marker='^', color='g', label='Buy Signal', alpha=1)
     plt.scatter([log[0] for log in sell_signals], [log[2] for log in sell_signals], marker='v', color='r', label='Sell Signal', alpha=1)
-    plt.title(f'Backtest Results for {symbol}')
+    plt.title(f'{symbol} Backtest Results')
     plt.legend()
     plt.savefig(os.path.join(output_dir, f'{symbol}_backtest.png'))
     plt.close()
