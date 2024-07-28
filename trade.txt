@@ -1,27 +1,27 @@
 Top 5 Gainers ETFs (5 Days):
-GLD: -0.43%, Action: hold, TP: 221.58, Max Profit: 1.95%
-DIA: 0.48%, Action: hold, TP: 404.04, Max Profit: 1.83%
-VNQ: 0.58%, Action: hold, TP: 89.05, Max Profit: 1.91%
-^GDAXI: 0.80%, Action: hold, TP: 18270.85, Max Profit: 1.42%
-IWM: 3.00%, Action: buy, TP: 228.56, Max Profit: 2.92%
+GLD: -0.43%, Action: hold, TP: 220.63, Max Profit: 1.95%, Duration: 0.00 hours
+DIA: 0.48%, Action: hold, TP: 405.97, Max Profit: 1.83%, Duration: 0.00 hours
+VNQ: 0.58%, Action: hold, TP: 89.57, Max Profit: 1.91%, Duration: 0.00 hours
+^GDAXI: 0.80%, Action: hold, TP: 18417.55, Max Profit: 1.42%, Duration: 0.00 hours
+IWM: 3.00%, Action: buy, TP: 228.70, Max Profit: 2.92%, Duration: 4.40 hours
 
 Top 5 Losers ETFs (5 Days):
-QQQ: -3.78%, Action: short, TP: 457.10, Max Profit: 5.25%
-XLK: -3.36%, Action: short, TP: 212.60, Max Profit: 5.87%
-MCHI: -3.21%, Action: short, TP: 40.49, Max Profit: 4.44%
-FXI: -2.93%, Action: short, TP: 24.98, Max Profit: 3.82%
-LIT: -2.70%, Action: short, TP: 38.07, Max Profit: 5.61%
+QQQ: -3.78%, Action: short, TP: 453.71, Max Profit: 5.25%, Duration: 1.99 hours
+XLK: -3.36%, Action: short, TP: 211.95, Max Profit: 5.87%, Duration: 1.84 hours
+MCHI: -3.21%, Action: short, TP: 40.42, Max Profit: 4.44%, Duration: 2.23 hours
+FXI: -2.93%, Action: short, TP: 25.01, Max Profit: 3.82%, Duration: 2.49 hours
+LIT: -2.70%, Action: short, TP: 38.21, Max Profit: 5.61%, Duration: 2.98 hours
 
 Top 5 Gainers CFDs (Last Day):
 
 Top 5 Losers CFDs (Last Day):
 
 Top 5 Gainers Forex Pairs (Last Day):
-AUDUSD=X: -1.41%, Action: short, TP: 0.63, Max Profit: 3.50%
-USDCAD=X: 1.26%, Action: buy, TP: 1.43, Max Profit: 1.58%
-GBPUSD=X: 1.48%, Action: buy, TP: 1.33, Max Profit: 3.06%
+AUDUSD=X: -1.41%, Action: hold, TP: 0.66, Max Profit: 3.50%, Duration: 0.00 hours
+USDCAD=X: 1.26%, Action: hold, TP: 1.38, Max Profit: 1.58%, Duration: 0.00 hours
+GBPUSD=X: 1.48%, Action: hold, TP: 1.29, Max Profit: 3.06%, Duration: 0.00 hours
 
 Top 5 Losers Forex Pairs (Last Day):
-AUDUSD=X: -1.41%, Action: short, TP: 0.63, Max Profit: 3.50%
-USDCAD=X: 1.26%, Action: buy, TP: 1.43, Max Profit: 1.58%
-GBPUSD=X: 1.48%, Action: buy, TP: 1.33, Max Profit: 3.06%
+AUDUSD=X: -1.41%, Action: hold, TP: 0.66, Max Profit: 3.50%, Duration: 0.00 hours
+USDCAD=X: 1.26%, Action: hold, TP: 1.38, Max Profit: 1.58%, Duration: 0.00 hours
+GBPUSD=X: 1.48%, Action: hold, TP: 1.29, Max Profit: 3.06%, Duration: 0.00 hours

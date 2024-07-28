@@ -1,4 +1,0 @@
-load_dotenv()
-ALPHA_VANTAGE_API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY')
-YOUR_XTB_USER_ID = os.getenv('YOUR_XTB_USER_ID')
-YOUR_XTB_PASSWORD = os.getenv('YOUR_XTB_PASSWORD')

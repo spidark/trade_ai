@@ -1,33 +1,38 @@
 import logging
+import pandas as pd
 
 def analyze_movement(percent_change):
-    logging.debug(f'Analyzing movement: {percent_change}')
-    if percent_change > 1:
+    if percent_change > 2:
         return "buy"
-    elif percent_change < -1:
+    elif percent_change < -2:
         return "short"
     else:
         return "hold"
 
 def estimate_max_profit(symbol, data):
-    try:
-        prices = data[symbol]['Close']
-        max_profit = (prices.max() - prices.min()) / prices.min() * 100
-        return max_profit
-    except Exception as e:
-        logging.error(f'Error estimating max profit for {symbol}: {e}')
-        return 0
+    recent_data = data[symbol]['Close']
+    max_profit = (recent_data.max() - recent_data.min()) / recent_data.min() * 100
+    return max_profit
 
 def calculate_tp(symbol, data, action):
-    try:
-        opening_price = data[symbol]['Open'].iloc[0]
-        if action == "buy":
-            tp = opening_price * 1.05  # 5% au-dessus du prix d'ouverture
-        elif action == "short":
-            tp = opening_price * 0.95  # 5% en-dessous du prix d'ouverture
-        else:
-            tp = opening_price
-        return tp
-    except Exception as e:
-        logging.error(f'Error calculating TP for {symbol}: {e}')
-        return 0
+    recent_close = data[symbol]['Close'].iloc[-1]
+    if action == "buy":
+        tp = recent_close * 1.02
+    elif action == "short":
+        tp = recent_close * 0.98
+    else:
+        tp = recent_close
+    return tp
+
+def estimate_duration(symbol, data, action):
+    recent_close = data[symbol]['Close'].iloc[-1]
+    tp = calculate_tp(symbol, data, action)
+    if action == "buy":
+        movement = data[symbol]['Close'].pct_change().mean()
+        duration = abs(tp - recent_close) / (recent_close * movement) if movement != 0 else float('inf')
+    elif action == "short":
+        movement = -data[symbol]['Close'].pct_change().mean()
+        duration = abs(tp - recent_close) / (recent_close * movement) if movement != 0 else float('inf')
+    else:
+        duration = 0
+    return duration

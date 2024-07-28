@@ -2,7 +2,7 @@ import logging
 import os
 from data_fetcher import get_etf_symbols, get_cfd_symbols, get_forex_symbols, get_data
 from movers_calculator import get_top_movers
-from analyzer import analyze_movement, estimate_max_profit, calculate_tp
+from analyzer import analyze_movement, estimate_max_profit, calculate_tp, estimate_duration
 from file_writer import write_to_file
 
 # Fichiers à supprimer
@@ -49,7 +49,8 @@ def main():
             action = analyze_movement(item[1])
             max_profit = estimate_max_profit(item[0], etf_data)
             tp = calculate_tp(item[0], etf_data, action)
-            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%\n"
+            duration = estimate_duration(item[0], etf_data, action)
+            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%, Duration: {duration:.2f} hours\n"
             lines.append(line)
         
         lines.append("\nTop 5 Losers ETFs (5 Days):\n")
@@ -57,7 +58,8 @@ def main():
             action = analyze_movement(item[1])
             max_profit = estimate_max_profit(item[0], etf_data)
             tp = calculate_tp(item[0], etf_data, action)
-            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%\n"
+            duration = estimate_duration(item[0], etf_data, action)
+            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%, Duration: {duration:.2f} hours\n"
             lines.append(line)
         
         lines.append("\nTop 5 Gainers CFDs (Last Day):\n")
@@ -65,7 +67,8 @@ def main():
             action = analyze_movement(item[1])
             max_profit = estimate_max_profit(item[0], cfd_data)
             tp = calculate_tp(item[0], cfd_data, action)
-            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%\n"
+            duration = estimate_duration(item[0], cfd_data, action)
+            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%, Duration: {duration:.2f} hours\n"
             lines.append(line)
         
         lines.append("\nTop 5 Losers CFDs (Last Day):\n")
@@ -73,7 +76,8 @@ def main():
             action = analyze_movement(item[1])
             max_profit = estimate_max_profit(item[0], cfd_data)
             tp = calculate_tp(item[0], cfd_data, action)
-            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%\n"
+            duration = estimate_duration(item[0], cfd_data, action)
+            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%, Duration: {duration:.2f} hours\n"
             lines.append(line)
         
         lines.append("\nTop 5 Gainers Forex Pairs (Last Day):\n")
@@ -81,7 +85,8 @@ def main():
             action = analyze_movement(item[1])
             max_profit = estimate_max_profit(item[0], forex_data)
             tp = calculate_tp(item[0], forex_data, action)
-            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%\n"
+            duration = estimate_duration(item[0], forex_data, action)
+            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%, Duration: {duration:.2f} hours\n"
             lines.append(line)
         
         lines.append("\nTop 5 Losers Forex Pairs (Last Day):\n")
@@ -89,7 +94,8 @@ def main():
             action = analyze_movement(item[1])
             max_profit = estimate_max_profit(item[0], forex_data)
             tp = calculate_tp(item[0], forex_data, action)
-            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%\n"
+            duration = estimate_duration(item[0], forex_data, action)
+            line = f"{item[0]}: {item[1]:.2f}%, Action: {action}, TP: {tp:.2f}, Max Profit: {max_profit:.2f}%, Duration: {duration:.2f} hours\n"
             lines.append(line)
         
         # Écrire les résultats dans le fichier
