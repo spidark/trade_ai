@@ -7,7 +7,7 @@ from file_writer import write_to_csv
 from technical_indicators import add_technical_indicators
 from visualization import plot_price_and_indicators, plot_backtest_results, plot_regression_results, plot_clustering_results
 from backtesting import backtest_strategy, simple_moving_average_strategy, simple_strategy, rsi_strategy, write_backtest_log
-from machine_learning import train_regression_model, predict_price, train_clustering_model, cluster_data
+from machine_learning import train_random_forest_model, predict_price, train_clustering_model, cluster_data
 
 # Fichiers à supprimer
 log_file = 'trade.log'
@@ -107,8 +107,8 @@ def main():
             tp = calculate_tp(symbol, etf_data, action)
             duration = estimate_duration(symbol, etf_data, action)
             
-            # Prédiction du prix avec le modèle de régression
-            model, mse, X_test, y_test, y_pred = train_regression_model(etf_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de forêt aléatoire
+            model, mse, X_test, y_test, y_pred = train_random_forest_model(etf_data[symbol].dropna(), 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
             
             comments = "Consistent" if action == "hold" and change > 0 else "Contradictory"
@@ -123,8 +123,8 @@ def main():
             tp = calculate_tp(symbol, etf_data, action)
             duration = estimate_duration(symbol, etf_data, action)
             
-            # Prédiction du prix avec le modèle de régression
-            model, mse, X_test, y_test, y_pred = train_regression_model(etf_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de forêt aléatoire
+            model, mse, X_test, y_test, y_pred = train_random_forest_model(etf_data[symbol].dropna(), 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
             
             comments = "Consistent" if action == "short" and predicted_price < etf_data[symbol]['Close'].iloc[-1] else "Contradictory"
@@ -139,8 +139,8 @@ def main():
             tp = calculate_tp(symbol, cfd_data, action)
             duration = estimate_duration(symbol, cfd_data, action)
             
-            # Prédiction du prix avec le modèle de régression
-            model, mse, X_test, y_test, y_pred = train_regression_model(cfd_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de forêt aléatoire
+            model, mse, X_test, y_test, y_pred = train_random_forest_model(cfd_data[symbol].dropna(), 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
             
             comments = "Consistent" if action == "hold" and change > 0 else "Contradictory"
@@ -155,8 +155,8 @@ def main():
             tp = calculate_tp(symbol, cfd_data, action)
             duration = estimate_duration(symbol, cfd_data, action)
             
-            # Prédiction du prix avec le modèle de régression
-            model, mse, X_test, y_test, y_pred = train_regression_model(cfd_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de forêt aléatoire
+            model, mse, X_test, y_test, y_pred = train_random_forest_model(cfd_data[symbol].dropna(), 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
             
             comments = "Consistent" if action == "short" and predicted_price < cfd_data[symbol]['Close'].iloc[-1] else "Contradictory"
@@ -171,8 +171,8 @@ def main():
             tp = calculate_tp(symbol, forex_data, action)
             duration = estimate_duration(symbol, forex_data, action)
             
-            # Prédiction du prix avec le modèle de régression
-            model, mse, X_test, y_test, y_pred = train_regression_model(forex_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de forêt aléatoire
+            model, mse, X_test, y_test, y_pred = train_random_forest_model(forex_data[symbol].dropna(), 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
             
             comments = "Consistent" if action == "hold" and change > 0 else "Contradictory"
@@ -187,8 +187,8 @@ def main():
             tp = calculate_tp(symbol, forex_data, action)
             duration = estimate_duration(symbol, forex_data, action)
             
-            # Prédiction du prix avec le modèle de régression
-            model, mse, X_test, y_test, y_pred = train_regression_model(forex_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de forêt aléatoire
+            model, mse, X_test, y_test, y_pred = train_random_forest_model(forex_data[symbol].dropna(), 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
             
             comments = "Consistent" if action == "short" and predicted_price < forex_data[symbol]['Close'].iloc[-1] else "Contradictory"
@@ -261,7 +261,7 @@ def main():
             # Train regression model and plot results
             clean_data = etf_data[symbol].dropna()
             if not clean_data.empty:
-                model, mse, X_test, y_test, y_pred = train_regression_model(clean_data, 'Close')
+                model, mse, X_test, y_test, y_pred = train_random_forest_model(clean_data, 'Close')
                 if model:
                     logging.info(f"Trained regression model for {symbol} with MSE: {mse}")
                     plot_regression_results(X_test, y_test, y_pred, output_dir)

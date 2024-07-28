@@ -6,6 +6,23 @@ from sklearn.linear_model import LinearRegression
 from sklearn.cluster import KMeans
 from sklearn.metrics import mean_squared_error, silhouette_score
 import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestRegressor
+
+def train_random_forest_model(data, target_column):
+    logging.info("Training Random Forest model")
+    try:
+        X = data.drop(columns=[target_column])
+        y = data[target_column]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        model = RandomForestRegressor(n_estimators=100, random_state=42)
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        mse = mean_squared_error(y_test, y_pred)
+        logging.info(f"Random Forest model trained with MSE: {mse}")
+        return model, mse, X_test, y_test, y_pred
+    except Exception as e:
+        logging.error(f"Error training Random Forest model: {e}")
+        return None, None, None, None, None
 
 def train_regression_model(data, target_column):
     logging.info("Training regression model")
