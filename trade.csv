@@ -1,27 +1,25 @@
-Category,Symbol,Percent Change,Action,TP,Max Profit,Duration,Predicted Price,Comments
+Category,Symbol,Percent Change,Action,TP,Max Profit,Duration,Predicted Price,Stop Loss,Take Profit,Comments
 Top Gainers ETFs (5 Days)
-ETF Gainer,GLD,-0.43,hold,220.63,1.95,0.00,221.60150329589842,Contradictory
-ETF Gainer,DIA,0.48,hold,405.97,1.83,0.00,404.1245959472656,Consistent
-ETF Gainer,VNQ,0.58,hold,89.57,1.91,0.00,89.44389945983886,Consistent
-ETF Gainer,^GDAXI,0.80,hold,18417.55,1.42,0.00,18400.450546875,Consistent
-ETF Gainer,IWM,3.00,buy,228.70,2.92,4.40,220.94610458374024,Contradictory
+ETF Gainer,GLD,-0.43,hold,220.63,1.95,0.00,222.59235672023755,220.63,220.63,Contradictory
+ETF Gainer,DIA,0.48,hold,405.97,1.83,0.00,404.8730189473653,405.97,405.97,Consistent
+ETF Gainer,VNQ,0.58,hold,89.57,1.91,0.00,89.62319344285976,89.57,89.57,Consistent
+ETF Gainer,^GDAXI,0.80,hold,18417.55,1.42,0.00,18498.918960859268,18417.55,18417.55,Consistent
+ETF Gainer,IWM,3.00,buy,228.70,2.92,4.40,222.45834917123165,219.74,233.19,Contradictory
 Top Losers ETFs (5 Days)
-ETF Loser,QQQ,-3.78,short,453.71,5.25,1.99,476.17940612792967,Contradictory
-ETF Loser,XLK,-3.36,short,211.95,5.87,1.84,222.8545050048828,Contradictory
-ETF Loser,MCHI,-3.21,short,40.42,4.44,2.23,41.6154008102417,Contradictory
-ETF Loser,FXI,-2.93,short,25.01,3.82,2.49,25.855000648498535,Contradictory
-ETF Loser,LIT,-2.70,short,38.21,5.61,2.98,39.16510112762451,Contradictory
+ETF Loser,QQQ,-3.78,short,453.71,5.25,1.99,482.8281749992695,472.23,444.45,Contradictory
+ETF Loser,XLK,-3.36,short,211.95,5.87,1.84,225.73442639883666,220.61,207.63,Contradictory
+ETF Loser,MCHI,-3.21,short,40.42,4.44,2.23,41.957554657258626,42.08,39.60,Contradictory
+ETF Loser,FXI,-2.93,short,25.01,3.82,2.49,25.82167323735266,26.03,24.50,Contradictory
+ETF Loser,LIT,-2.70,short,38.21,5.61,2.98,39.17591064070139,39.77,37.43,Contradictory
 Top Gainers CFDs (Last Day)
 Top Losers CFDs (Last Day)
 Top Gainers Forex Pairs (Last Day)
-Forex Gainer,AUDUSD=X,-1.42,hold,0.66,3.50,0.00,0.6688310813903808,Contradictory
-Forex Gainer,USDCAD=X,1.27,hold,1.38,1.60,0.00,1.3713144207000731,Consistent
-Forex Gainer,EURUSD=X,1.44,hold,1.09,2.44,0.00,1.089999475479126,Consistent
-Forex Gainer,GBPUSD=X,1.48,hold,1.29,3.06,0.00,1.2929896092414856,Consistent
-Forex Gainer,USDJPY=X,0.00,hold,nan,5.14,0.00,156.6505143737793,Contradictory
+Forex Gainer,AUDUSD=X,-1.43,hold,0.66,3.50,0.00,0.6696308851242065,0.66,0.66,Contradictory
+Forex Gainer,USDCAD=X,1.27,hold,1.38,1.60,0.00,1.370700001716614,1.38,1.38,Consistent
+Forex Gainer,EURUSD=X,1.44,hold,1.09,2.44,0.00,1.0899182558059695,1.09,1.09,Consistent
+Forex Gainer,GBPUSD=X,1.48,hold,1.29,3.06,0.00,1.2933096885681152,1.29,1.29,Consistent
 Top Losers Forex Pairs (Last Day)
-Forex Loser,AUDUSD=X,-1.42,hold,0.66,3.50,0.00,0.6688310813903808,Contradictory
-Forex Loser,USDCAD=X,1.27,hold,1.38,1.60,0.00,1.3713144207000731,Contradictory
-Forex Loser,EURUSD=X,1.44,hold,1.09,2.44,0.00,1.089999475479126,Contradictory
-Forex Loser,GBPUSD=X,1.48,hold,1.29,3.06,0.00,1.2929896092414856,Contradictory
-Forex Loser,USDJPY=X,0.00,hold,nan,5.14,0.00,156.6505143737793,Contradictory
+Forex Loser,AUDUSD=X,-1.43,hold,0.66,3.50,0.00,0.6696308851242065,0.66,0.66,Contradictory
+Forex Loser,USDCAD=X,1.27,hold,1.38,1.60,0.00,1.370700001716614,1.38,1.38,Contradictory
+Forex Loser,EURUSD=X,1.44,hold,1.09,2.44,0.00,1.0899182558059695,1.09,1.09,Contradictory
+Forex Loser,GBPUSD=X,1.48,hold,1.29,3.06,0.00,1.2933096885681152,1.29,1.29,Contradictory

@@ -7,7 +7,7 @@ from file_writer import write_to_csv
 from technical_indicators import add_technical_indicators
 from visualization import plot_price_and_indicators, plot_backtest_results, plot_regression_results, plot_clustering_results
 from backtesting import backtest_strategy, simple_moving_average_strategy, simple_strategy, rsi_strategy, write_backtest_log
-from machine_learning import train_random_forest_model, predict_price, train_clustering_model, cluster_data
+from machine_learning import train_regression_model, predict_price, train_clustering_model, cluster_data
 
 # Fichiers à supprimer
 log_file = 'trade.log'
@@ -41,20 +41,27 @@ def check_close_column(data, symbols):
             missing_close.append(symbol)
     return missing_close
 
-def ensure_minimum_forex_pairs(top_gainers_forex, top_losers_forex, all_forex_symbols, minimum_count=5):
-    all_forex_set = set(all_forex_symbols)
-    selected_forex = set([item[0] for item in top_gainers_forex + top_losers_forex])
+def calculate_risk_management(data, action, capital=10000, risk_per_trade=0.01):
+    """
+    Calcule la taille de la position basée sur le risque par trade et les niveaux de stop-loss et take-profit.
+    """
+    stop_loss_pct = 0.02  # 2% du prix actuel
+    take_profit_pct = 0.04  # 4% du prix actuel
+    current_price = data['Close'].iloc[-1]
 
-    while len(selected_forex) < minimum_count and all_forex_set:
-        symbol = all_forex_set.pop()
-        if symbol not in selected_forex:
-            selected_forex.add(symbol)
-            top_gainers_forex.append((symbol, 0))  # Adding with zero change if not enough pairs
-            if len(top_gainers_forex) > minimum_count:
-                break
-            top_losers_forex.append((symbol, 0))
-    
-    return top_gainers_forex[:minimum_count], top_losers_forex[:minimum_count]
+    if action == 'buy':
+        stop_loss_price = current_price * (1 - stop_loss_pct)
+        take_profit_price = current_price * (1 + take_profit_pct)
+    elif action == 'short':
+        stop_loss_price = current_price * (1 + stop_loss_pct)
+        take_profit_price = current_price * (1 - take_profit_pct)
+    else:
+        stop_loss_price = current_price
+        take_profit_price = current_price
+
+    position_size = (capital * risk_per_trade) / abs(current_price - stop_loss_price)
+
+    return position_size, stop_loss_price, take_profit_price
 
 def main():
     logging.info('Starting main script')
@@ -90,15 +97,12 @@ def main():
         if missing_close_forex:
             raise ValueError(f"Column 'Close' not found in Forex data for symbols: {missing_close_forex}")
 
-        # S'assurer d'avoir au moins 5 paires Forex dans les résultats
-        top_gainers_forex, top_losers_forex = ensure_minimum_forex_pairs(top_gainers_forex, top_losers_forex, forex_symbols, minimum_count=5)
-
         # Analyser les données et ajouter les indicateurs techniques
         logging.info("Analyzing data and adding technical indicators")
         results = analyze_data(top_gainers_etf, top_losers_etf, etf_data, top_gainers_cfd, top_losers_cfd, cfd_data, top_gainers_forex, top_losers_forex, forex_data)
         
         # Préparer les résultats au format CSV
-        csv_lines = [["Category", "Symbol", "Percent Change", "Action", "TP", "Max Profit", "Duration", "Predicted Price", "Comments"]]
+        csv_lines = [["Category", "Symbol", "Percent Change", "Action", "TP", "Max Profit", "Duration", "Predicted Price", "Stop Loss", "Take Profit", "Comments"]]
         csv_lines += [["Top Gainers ETFs (5 Days)"]]
         for item in top_gainers_etf:
             symbol, change = item
@@ -107,13 +111,16 @@ def main():
             tp = calculate_tp(symbol, etf_data, action)
             duration = estimate_duration(symbol, etf_data, action)
             
-            # Prédiction du prix avec le modèle de forêt aléatoire
-            model, mse, X_test, y_test, y_pred = train_random_forest_model(etf_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(etf_data[symbol], 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            # Calcul du stop loss et du take profit
+            position_size, stop_loss_price, take_profit_price = calculate_risk_management(etf_data[symbol], action)
             
             comments = "Consistent" if action == "hold" and change > 0 else "Contradictory"
             
-            csv_lines.append(["ETF Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
+            csv_lines.append(["ETF Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", f"{stop_loss_price:.2f}", f"{take_profit_price:.2f}", comments])
 
         csv_lines += [["Top Losers ETFs (5 Days)"]]
         for item in top_losers_etf:
@@ -123,13 +130,16 @@ def main():
             tp = calculate_tp(symbol, etf_data, action)
             duration = estimate_duration(symbol, etf_data, action)
             
-            # Prédiction du prix avec le modèle de forêt aléatoire
-            model, mse, X_test, y_test, y_pred = train_random_forest_model(etf_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(etf_data[symbol], 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            # Calcul du stop loss et du take profit
+            position_size, stop_loss_price, take_profit_price = calculate_risk_management(etf_data[symbol], action)
             
             comments = "Consistent" if action == "short" and predicted_price < etf_data[symbol]['Close'].iloc[-1] else "Contradictory"
             
-            csv_lines.append(["ETF Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
+            csv_lines.append(["ETF Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", f"{stop_loss_price:.2f}", f"{take_profit_price:.2f}", comments])
 
         csv_lines += [["Top Gainers CFDs (Last Day)"]]
         for item in top_gainers_cfd:
@@ -139,13 +149,16 @@ def main():
             tp = calculate_tp(symbol, cfd_data, action)
             duration = estimate_duration(symbol, cfd_data, action)
             
-            # Prédiction du prix avec le modèle de forêt aléatoire
-            model, mse, X_test, y_test, y_pred = train_random_forest_model(cfd_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(cfd_data[symbol], 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            # Calcul du stop loss et du take profit
+            position_size, stop_loss_price, take_profit_price = calculate_risk_management(cfd_data[symbol], action)
             
             comments = "Consistent" if action == "hold" and change > 0 else "Contradictory"
             
-            csv_lines.append(["CFD Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
+            csv_lines.append(["CFD Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", f"{stop_loss_price:.2f}", f"{take_profit_price:.2f}", comments])
 
         csv_lines += [["Top Losers CFDs (Last Day)"]]
         for item in top_losers_cfd:
@@ -155,13 +168,16 @@ def main():
             tp = calculate_tp(symbol, cfd_data, action)
             duration = estimate_duration(symbol, cfd_data, action)
             
-            # Prédiction du prix avec le modèle de forêt aléatoire
-            model, mse, X_test, y_test, y_pred = train_random_forest_model(cfd_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(cfd_data[symbol], 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            # Calcul du stop loss et du take profit
+            position_size, stop_loss_price, take_profit_price = calculate_risk_management(cfd_data[symbol], action)
             
             comments = "Consistent" if action == "short" and predicted_price < cfd_data[symbol]['Close'].iloc[-1] else "Contradictory"
             
-            csv_lines.append(["CFD Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
+            csv_lines.append(["CFD Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", f"{stop_loss_price:.2f}", f"{take_profit_price:.2f}", comments])
 
         csv_lines += [["Top Gainers Forex Pairs (Last Day)"]]
         for item in top_gainers_forex:
@@ -171,13 +187,16 @@ def main():
             tp = calculate_tp(symbol, forex_data, action)
             duration = estimate_duration(symbol, forex_data, action)
             
-            # Prédiction du prix avec le modèle de forêt aléatoire
-            model, mse, X_test, y_test, y_pred = train_random_forest_model(forex_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(forex_data[symbol], 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            # Calcul du stop loss et du take profit
+            position_size, stop_loss_price, take_profit_price = calculate_risk_management(forex_data[symbol], action)
             
             comments = "Consistent" if action == "hold" and change > 0 else "Contradictory"
             
-            csv_lines.append(["Forex Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
+            csv_lines.append(["Forex Gainer", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", f"{stop_loss_price:.2f}", f"{take_profit_price:.2f}", comments])
 
         csv_lines += [["Top Losers Forex Pairs (Last Day)"]]
         for item in top_losers_forex:
@@ -187,13 +206,16 @@ def main():
             tp = calculate_tp(symbol, forex_data, action)
             duration = estimate_duration(symbol, forex_data, action)
             
-            # Prédiction du prix avec le modèle de forêt aléatoire
-            model, mse, X_test, y_test, y_pred = train_random_forest_model(forex_data[symbol].dropna(), 'Close')
+            # Prédiction du prix avec le modèle de régression
+            model, mse, X_test, y_test, y_pred = train_regression_model(forex_data[symbol], 'Close')
             predicted_price = y_pred[-1] if y_pred is not None else "N/A"
+            
+            # Calcul du stop loss et du take profit
+            position_size, stop_loss_price, take_profit_price = calculate_risk_management(forex_data[symbol], action)
             
             comments = "Consistent" if action == "short" and predicted_price < forex_data[symbol]['Close'].iloc[-1] else "Contradictory"
             
-            csv_lines.append(["Forex Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", comments])
+            csv_lines.append(["Forex Loser", symbol, f"{change:.2f}", action, f"{tp:.2f}", f"{max_profit:.2f}", f"{duration:.2f}", f"{predicted_price}", f"{stop_loss_price:.2f}", f"{take_profit_price:.2f}", comments])
 
         # Écrire les résultats dans le fichier CSV
         write_to_csv(csv_file, csv_lines)
@@ -261,7 +283,7 @@ def main():
             # Train regression model and plot results
             clean_data = etf_data[symbol].dropna()
             if not clean_data.empty:
-                model, mse, X_test, y_test, y_pred = train_random_forest_model(clean_data, 'Close')
+                model, mse, X_test, y_test, y_pred = train_regression_model(clean_data, 'Close')
                 if model:
                     logging.info(f"Trained regression model for {symbol} with MSE: {mse}")
                     plot_regression_results(X_test, y_test, y_pred, output_dir)
