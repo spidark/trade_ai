@@ -97,6 +97,8 @@ def main():
         # Récupérer les symboles et les données pour les ETF
         etf_symbols = get_etf_symbols()
         etf_data = get_data(etf_symbols, period="5d", interval="1d")
+        if etf_data is None or len(etf_data) == 0:
+            logging.error("No ETF data retrieved")
         logging.debug(f'ETF Data: {etf_data.head()}')
         top_gainers_etf, top_losers_etf = get_top_movers(etf_data)
         missing_close_etf = check_close_column(etf_data, etf_symbols)
@@ -106,6 +108,8 @@ def main():
         # Récupérer les symboles et les données pour les CFD
         cfd_symbols = get_cfd_symbols()
         cfd_data = get_data(cfd_symbols, period="1d", interval="1m")
+        if cfd_data is None or len(cfd_data) == 0:
+            logging.error("No CFD data retrieved")
         logging.debug(f'CFD Data: {cfd_data.head()}')
         top_gainers_cfd, top_losers_cfd = get_top_movers(cfd_data)
         missing_close_cfd = check_close_column(cfd_data, cfd_symbols)
@@ -119,6 +123,8 @@ def main():
         # Récupérer les symboles et les données pour les paires Forex
         forex_symbols = get_forex_symbols()
         forex_data = get_data(forex_symbols, period="1mo", interval="1d")
+        if forex_data is None or len(forex_data) == 0:
+            logging.error("No Forex data retrieved")
         logging.debug(f'Forex Data: {forex_data.head()}')
         top_gainers_forex, top_losers_forex = get_top_movers(forex_data)
         missing_close_forex = check_close_column(forex_data, forex_symbols)
