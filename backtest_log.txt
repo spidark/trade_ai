@@ -1,0 +1,79 @@
+Backtesting results for MSS:
+Backtesting results for MSS_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 1.1299999952316284, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 1.1119999885559082, Balance: 9999.981999993324
+Backtesting results for MSS_rsi_strategy:
+Backtesting results for SPY:
+Backtesting results for SPY_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 544.4400024414062, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 543.719970703125, Balance: 9999.279968261719
+Backtesting results for SPY_rsi_strategy:
+Backtesting results for IVV:
+Backtesting results for IVV_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 547.3900146484375, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 546.6300048828125, Balance: 9999.239990234375
+Backtesting results for IVV_rsi_strategy:
+Backtesting results for VOO:
+Backtesting results for VOO_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 500.3299865722656, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 499.70001220703125, Balance: 9999.370025634766
+Backtesting results for VOO_rsi_strategy:
+Backtesting results for QQQ:
+Backtesting results for QQQ_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 462.9700012207031, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 462.9219970703125, Balance: 9999.95199584961
+Backtesting results for QQQ_rsi_strategy:
+Backtesting results for DIA:
+Backtesting results for DIA_simple_strategy:
+2024-07-25 00:00:00, buy, Price: 399.489990234375, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 405.0, Balance: 10005.510009765625
+Backtesting results for DIA_rsi_strategy:
+Backtesting results for IWM:
+Backtesting results for IWM_simple_strategy:
+2024-07-25 00:00:00, buy, Price: 220.57000732421875, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 221.9949951171875, Balance: 10001.424987792969
+Backtesting results for IWM_rsi_strategy:
+Backtesting results for VNQ:
+Backtesting results for VNQ_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 89.56999969482422, Balance: 10000.0
+Backtesting results for VNQ_rsi_strategy:
+Backtesting results for GLD:
+Backtesting results for GLD_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 220.6300048828125, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 219.3800048828125, Balance: 9998.75
+Backtesting results for GLD_rsi_strategy:
+Backtesting results for XLK:
+Backtesting results for XLK_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 216.27999877929688, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 215.40499877929688, Balance: 9999.125
+Backtesting results for XLK_rsi_strategy:
+Backtesting results for EZU:
+Backtesting results for EZU_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 49.4900016784668, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 48.86009979248047, Balance: 9999.370098114014
+Backtesting results for EZU_rsi_strategy:
+Backtesting results for MCHI:
+Backtesting results for MCHI_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 41.25, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 41.060001373291016, Balance: 9999.810001373291
+Backtesting results for MCHI_rsi_strategy:
+Backtesting results for VGK:
+Backtesting results for VGK_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 68.12000274658203, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 67.56999969482422, Balance: 9999.449996948242
+Backtesting results for VGK_rsi_strategy:
+Backtesting results for FXI:
+Backtesting results for FXI_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 25.520000457763672, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 25.499399185180664, Balance: 9999.979398727417
+Backtesting results for FXI_rsi_strategy:
+Backtesting results for LIT:
+Backtesting results for LIT_simple_strategy:
+2024-07-25 00:00:00, buy, Price: 38.38999938964844, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 38.23500061035156, Balance: 9999.845001220703
+Backtesting results for LIT_rsi_strategy:
+Backtesting results for ^GDAXI:
+Backtesting results for ^GDAXI_simple_strategy:
+2024-07-26 00:00:00, buy, Price: 18417.55078125, Balance: 10000.0
+2024-07-29 00:00:00, sell, Price: 18316.0, Balance: 9898.44921875
+Backtesting results for ^GDAXI_rsi_strategy:
