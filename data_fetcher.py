@@ -5,7 +5,7 @@ import pandas as pd
 def get_etf_symbols():
     logging.info('Fetching ETF symbols using yfinance')
     try:
-        etf_symbols = ['SPY', 'IVV', 'VOO', 'QQQ', 'DIA', 'IWM', 'VNQ', 'GLD', 'XLK', 'EZU', 'MCHI', 'VGK', 'FXI', 'LIT', '^GDAXI']
+        etf_symbols = ['MSS', 'SPY', 'IVV', 'VOO', 'QQQ', 'DIA', 'IWM', 'VNQ', 'GLD', 'XLK', 'EZU', 'MCHI', 'VGK', 'FXI', 'LIT', '^GDAXI']
         logging.info('ETF symbols fetched successfully')
         return etf_symbols
     except Exception as e:
@@ -17,8 +17,9 @@ def get_cfd_symbols():
     try:
         cfd_symbols = [
             'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NFLX', 'TSLA', 'BABA', 'NVDA', 
-            'JPM', 'AMD', '^N225', 'INTC', 'META', 'BA', 'DIS', 'PYPL', 'CSCO', 
-            'PEP', 'KO', 'NKE', 'WMT', 'PG', 'HD', 'VZ', 'T', 'XOM', 'CVX', 'MRK'
+            'JPM', 'AMD', 'CME', 'INTC', 'META', 'BA', 'DIS', 'PYPL', 'CSCO', 
+            'PEP', 'KO', 'NKE', 'WMT', 'PG', 'HD', 'VZ', 'T', 'XOM', 'CVX', 'MRK',
+            'DJIA'
         ]
         logging.info('CFD symbols fetched successfully')
         return cfd_symbols

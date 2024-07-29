@@ -10,6 +10,7 @@ def analyze_movement(percent_change):
         return "hold"
 
 def estimate_max_profit(symbol, data):
+    data[symbol].loc[:, 'Close'] = data[symbol]['Close'].ffill().bfill()  # Remplir les valeurs NA correctement
     recent_data = data[symbol]['Close']
     max_profit = (recent_data.max() - recent_data.min()) / recent_data.min() * 100
     return max_profit
@@ -25,6 +26,7 @@ def calculate_tp(symbol, data, action):
     return tp
 
 def estimate_duration(symbol, data, action):
+    data[symbol].loc[:, 'Close'] = data[symbol]['Close'].ffill().bfill()  # Remplir les valeurs NA correctement
     recent_close = data[symbol]['Close'].iloc[-1]
     tp = calculate_tp(symbol, data, action)
     if action == "buy":
